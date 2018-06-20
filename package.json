@@ -1,0 +1,62 @@
+{
+    "name": "timer-ext",
+    "displayName": "timer-ext",
+    "description": "VSC Extension for Timer app",
+    "version": "0.0.1",
+    "publisher": "niewicz",
+    "engines": {
+        "vscode": "^1.24.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
+        "*"
+    ],
+    "main": "./out/extension",
+    "contributes": {
+        "commands": [
+            {
+                "command": "extension.logIn",
+                "title": "Timer: Log in"
+            },
+            {
+                "command": "extension.startTracking",
+                "title": "Timer: Start tracking"
+            },
+            {
+                "command": "extension.stopTracking",
+                "title": "Timer: Stop tracking"
+            },
+            {
+                "command": "extension.openApp",
+                "title": "Timer: Open app"
+            },
+            {
+                "command": "extension.refresh",
+                "title": "Timer: Refresh"
+            }
+        ]
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "postinstall": "node ./node_modules/vscode/bin/install",
+        "test": "npm run compile && node ./node_modules/vscode/bin/test"
+    },
+    "devDependencies": {
+        "typescript": "^2.6.1",
+        "vscode": "^1.1.6",
+        "tslint": "^5.8.0",
+        "@types/node": "^7.0.43",
+        "@types/mocha": "^2.2.42"
+    },
+    "dependencies": {
+        "@types/request": "^2.47.1",
+        "lodash": "^4.17.10",
+        "request": "^2.87.0",
+        "request-promise": "^4.2.2",
+        "vscode-cache": "^0.3.0"
+    }
+}
