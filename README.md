@@ -1,5 +1,5 @@
 # timer-ext 
-Visual Studi Code extension for Timer app
+Visual Studio Code extension for Timer app
 
 ## Commands
 ```
