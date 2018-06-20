@@ -1,9 +1,9 @@
 export function appPath(): string {
-  return `http://localhost:4200`;
+  return `https://tmr-app.herokuapp.com/`;
 }
 
 export function baseApiPath(): string {
-  return "http://localhost:3000";
+  return "https://whispering-temple-93009.herokuapp.com";
 }
 
 export function validateTokenPath(): string {
