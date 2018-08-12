@@ -10,6 +10,10 @@ export function activate(context: vscode.ExtensionContext) {
     timer.logIn();
   });
 
+  let dispLogOut = vscode.commands.registerCommand("extension.logOut", () => {
+    timer.logOut();
+  });
+
   let dispStartTracking = vscode.commands.registerCommand(
     "extension.startTracking",
     () => {
@@ -33,6 +37,7 @@ export function activate(context: vscode.ExtensionContext) {
   });
 
   context.subscriptions.push(dispLogIn);
+  context.subscriptions.push(dispLogOut);
   context.subscriptions.push(dispStartTracking);
   context.subscriptions.push(dispStopTracking);
   context.subscriptions.push(dispRefresh);

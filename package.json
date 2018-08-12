@@ -21,6 +21,10 @@
                 "title": "Timer: Log in"
             },
             {
+                "command": "extension.logOut",
+                "title": "Timer: Log out"
+            },
+            {
                 "command": "extension.startTracking",
                 "title": "Timer: Start tracking"
             },

@@ -9,7 +9,8 @@ import {
   signInPath,
   currentTimeEntryPath,
   timeEntriesPath,
-  tasksPath
+  tasksPath,
+  signOutPath
 } from "./routes";
 import { ITimeEntry, ITask, IPickTask } from "./interfaces";
 
@@ -61,15 +62,33 @@ export class TimerApi {
       .catch(error => window.showErrorMessage("Timer failed to sign in."));
   }
 
-  public getCurrentTimeEntry(notify: boolean): Thenable<ITimeEntry> {
+  public signOut(): Thenable<void> {
     const options = {
-      method: "GET",
-      uri: currentTimeEntryPath(),
+      method: "DELETE",
+      uri: signOutPath(),
       headers: this.getAuthData()
     };
 
     return rp(options)
-      .then(body => camelize(JSON.parse(body)).timeEntry)
+      .then(response => {
+        this.cleanAuthData();
+        window.showInformationMessage("Timer: You are logged out.");
+      })
+      .catch(error => {
+        window.showErrorMessage("Timer failed to log out.");
+      });
+  }
+
+  public getCurrentTimeEntry(notify: boolean): Thenable<ITimeEntry> {
+    const options = {
+      method: "GET",
+      uri: currentTimeEntryPath(),
+      headers: this.getAuthData(),
+      json: true
+    };
+
+    return rp(options)
+      .then(body => camelize(body).timeEntry)
       .catch(error => {
         if (notify) {
           window.showErrorMessage(
@@ -86,11 +105,12 @@ export class TimerApi {
       headers: this.getAuthData(),
       form: {
         time_entry: decamelize(params)
-      }
+      },
+      json: true
     };
 
     return rp(options)
-      .then(body => camelize(JSON.parse(body)).timeEntry)
+      .then(body => camelize(body).timeEntry)
       .catch(error =>
         window.showErrorMessage(
           "Timer failed to create time entry. Check if you are signed in."
@@ -110,11 +130,12 @@ export class TimerApi {
           end_at: params.endAt,
           task_id: params.taskId
         }
-      }
+      },
+      json: true
     };
 
     return rp(options)
-      .then(body => camelize(JSON.parse(body)).timeEntry)
+      .then(body => camelize(body).timeEntry)
       .catch(error =>
         window.showErrorMessage(
           "Timer failed to update time entry. Check if you are signed in."
@@ -129,11 +150,12 @@ export class TimerApi {
       headers: this.getAuthData(),
       form: {
         task: decamelize(params)
-      }
+      },
+      json: true
     };
 
     return rp(options)
-      .then(body => camelize(JSON.parse(body)).task)
+      .then(body => camelize(body).task)
       .catch(error =>
         window.showErrorMessage(
           "Timer failed to create new task. Check if you are signed in."
@@ -149,11 +171,12 @@ export class TimerApi {
       form: {
         order_by: "created_at",
         order: "DESC"
-      }
+      },
+      json: true
     };
 
     return rp(options)
-      .then(body => camelize(JSON.parse(body)).tasks)
+      .then(body => camelize(body).tasks)
       .then((tasks: ITask[]) =>
         tasks.map((task: ITask) => ({
           label: task.title,
@@ -180,7 +203,7 @@ export class TimerApi {
       );
   }
 
-  public getAuthData() {
+  private getAuthData() {
     const authData = this._storage.get("authData");
 
     if (authData) {
@@ -194,7 +217,11 @@ export class TimerApi {
     }
   }
 
-  public storeAuthData(data: any) {
+  private cleanAuthData() {
+    this._storage.flush();
+  }
+
+  private storeAuthData(data: any) {
     this._storage.put("authData", {
       "access-token": data["access-token"],
       client: data["client"],

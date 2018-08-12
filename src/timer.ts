@@ -84,6 +84,10 @@ export class Timer {
       );
   }
 
+  public logOut() {
+    this._api.signOut();
+  }
+
   public getCurrentTimeEntry(notify: boolean = false) {
     this._api
       .getCurrentTimeEntry(notify)
